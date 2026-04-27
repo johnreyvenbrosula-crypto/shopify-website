@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account - ShopNow</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F7F5F0;
+      --surface: #FFFFFF;
+      --surface2: #F0EDE6;
+      --border: rgba(0,0,0,0.10);
+      --border2: rgba(0,0,0,0.18);
+      --text: #1A1814;
+      --text2: #6B6860;
+      --text3: #A09E98;
+      --accent: #D94F2B;
+      --accent2: #B33D1E;
+      --gold: #B87D2F;
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(247,245,240,0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .logo {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .logo em { color: var(--accent); font-style: italic; }
+
+    .header-spacer { flex: 1; }
+
+    /* BACK BUTTON */
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border2);
+      background: var(--surface);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.18s;
+    }
+    .back-btn:hover {
+      background: var(--surface2);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .back-btn svg { width: 16px; height: 16px; }
+
+    /* MAIN CONTENT */
+    .main-content {
+      flex: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      width: 100%;
+      animation: fadeInUp 0.5s ease both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      font-size: 14px;
+      color: var(--text2);
+    }
+
+    /* ACCOUNT SECTIONS */
+    .account-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .account-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .card-header:hover {
+      background: var(--surface2);
+    }
+
+    .card-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .card-toggle {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text3);
+      transition: transform 0.2s;
+    }
+
+    .card-toggle.open {
+      transform: rotate(180deg);
+    }
+
+    .card-body {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .card-body.open {
+      padding: 20px;
+      max-height: 400px;
+    }
+
+    /* PROFILE SECTION */
+    .profile-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .profile-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .profile-details h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .profile-details p {
+      font-size: 13px;
+      color: var(--text2);
+    }
+
+    .profile-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 480px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input {
+      padding: 10px 14px;
+      border: 1px solid var(--border2);
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--accent);
+    }
+
+    .save-btn {
+      align-self: flex-start;
+      padding: 10px 24px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+
+    .save-btn:hover {
+      background: var(--accent2);
+    }
+
+    /* ORDERS SECTION */
+    .order-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .order-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+    }
+
+    .order-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .order-emoji {
+      font-size: 24px;
+    }
+
+    .order-details h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .order-details p {
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    .order-status {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .status-delivered {
+      background: #E4F7E4;
+      color: #2E7D32;
+    }
+
+    .status-processing {
+      background: #E3F2FD;
+      color: #1565C0;
+    }
+
+    .status-shipped {
+      background: #FFF3E0;
+      color: #E65100;
+    }
+
+    /* SETTINGS SECTION */
+    .settings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .settings-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .settings-item:hover {
+      background: var(--border);
+    }
+
+    .settings-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .settings-item span {
+      font-size: 14px;
+    }
+
+    .settings-toggle {
+      width: 40px;
+      height: 22px;
+      background: var(--border2);
+      border-radius: 999px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .settings-toggle.active {
+      background: var(--accent);
+    }
+
+    .settings-toggle::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .settings-toggle.active::after {
+      transform: translateX(18px);
+    }
+
+    /* LOGOUT BUTTON */
+    .logout-section {
+      margin-top: 12px;
+    }
+
+    .logout-btn {
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .logout-btn:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: #1A1814;
+      color: #F7F5F0;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s, transform 0.22s;
+      z-index: 9999;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 480px) {
+      .main-content { padding: 24px 16px; }
+      .page-header h1 { font-size: 26px; }
+      .profile-info { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="shopnow.html" class="back-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Back
+    </a>
+    <div class="header-spacer"></div>
+    <a href="shopnow.html" class="logo">Shop<em>Now</em></a>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+  <div class="page-header">
+    <h1>My Account</h1>
+    <p>Manage your profile, orders, and preferences</p>
+  </div>
+
+  <div class="account-sections">
+    <!-- PROFILE CARD -->
+    <div class="account-card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-header-left">
+          <div class="card-icon">👤</div>
+          <span class="card-title">Profile Information</span>
+        </div>
+        <div class="card-toggle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card-body open">
+        <div class="profile-info">
+          <div class="profile-avatar" id="profileAvatar">JD</div>
+          <div class="profile-details">
+            <h3 id="profileName">John Doe</h3>
+            <p id="profileEmail">john@example.com</p>
+          </div>
+        </div>
+        <form class="profile-form" onsubmit="saveProfile(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" id="firstName" value="John" />
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" id="lastName" value="Doe" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="profileEmailInput" value="john@example.com" />
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="phone" value="+1 (555) 123-4567" />
+          </div>
+          <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ORDERS CARD -->
+    <div class="account-card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-header-left">
+          <div class="card-icon">📦</div>
+          <span class="card-title">Order History</span>
+        </div>
+        <div class="card-toggle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="order-list">
+          <div class="order-item">
+            <div class="order-info">
+              <div class="order-emoji">🎧</div>
+              <div class="order-details">
+                <h4>Wireless Headphones</h4>
+                <p>Order #SN-2847 • Dec 15, 2025</p>
+              </div>
+            </div>
+            <span class="order-status status-delivered">Delivered</span>
+          </div>
+          <div class="order-item">
+            <div class="order-info">
+              <div class="order-emoji">👟</div>
+              <div class="order-details">
+                <h4>Running Shoes</h4>
+                <p>Order #SN-3102 • Jan 8, 2026</p>
+              </div>
+            </div>
+            <span class="order-status status-shipped">Shipped</span>
+          </div>
+          <div class="order-item">
+            <div class="order-info">
+              <div class="order-emoji">☕</div>
+              <div class="order-details">
+                <h4>Coffee Maker</h4>
+                <p>Order #SN-3456 • Feb 22, 2026</p>
+              </div>
+            </div>
+            <span class="order-status status-processing">Processing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS CARD -->
+    <div class="account-card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-header-left">
+          <div class="card-icon">⚙️</div>
+          <span class="card-title">Settings</span>
+        </div>
+        <div class="card-toggle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="settings-list">
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <span>Email Notifications</span>
+            </div>
+            <div class="settings-toggle active" onclick="toggleSetting(this)"></div>
+          </div>
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <span>SMS Notifications</span>
+            </div>
+            <div class="settings-toggle" onclick="toggleSetting(this)"></div>
+          </div>
+          <div class="settings-item">
+            <div class="settings-item-left">
+              <span>Newsletter Subscription</span>
+            </div>
+            <div class="settings-toggle active" onclick="toggleSetting(this)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGOUT -->
+    <div class="logout-section">
+      <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
+    </div>
+  </div>
+</main>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // Check if user is logged in
+  const isLoggedIn = localStorage.getItem('shopnow_logged_in') === 'true';
+  const userEmail = localStorage.getItem('shopnow_user_email') || 'john@example.com';
+  
+  if (!isLoggedIn) {
+    window.location.href = 'login.html';
+  }
+
+  // Load user data
+  document.getElementById('profileEmail').textContent = userEmail;
+  document.getElementById('profileEmailInput').value = userEmail;
+
+  // Generate avatar initials
+  const name = localStorage.getItem('shopnow_user_name') || 'John Doe';
+  const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+  document.getElementById('profileAvatar').textContent = initials;
+  document.getElementById('profileName').textContent = name;
+
+  function toggleCard(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.card-toggle');
+    body.classList.toggle('open');
+    toggle.classList.toggle('open');
+  }
+
+  function toggleSetting(el) {
+    el.classList.toggle('active');
+    showToast('✓ Setting updated');
+  }
+
+  function saveProfile(e) {
+    e.preventDefault();
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const email = document.getElementById('profileEmailInput').value;
+    
+    localStorage.setItem('shopnow_user_name', `${firstName} ${lastName}`);
+    localStorage.setItem('shopnow_user_email', email);
+    
+    // Update display
+    document.getElementById('profileName').textContent = `${firstName} ${lastName}`;
+    document.getElementById('profileEmail').textContent = email;
+    document.getElementById('profileAvatar').textContent = firstName[0] + lastName[0];
+    
+    showToast('✓ Profile updated successfully');
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('shopnow_logged_in');
+    localStorage.removeItem('shopnow_user_email');
+    localStorage.removeItem('shopnow_user_name');
+    showToast('👋 You have been signed out');
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 1000);
+  }
+
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  }
+</script>
+
+</body>
+</html>
